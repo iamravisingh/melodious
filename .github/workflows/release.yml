@@ -41,7 +41,6 @@ jobs:
         id: release
         with:
           release-type: node
-          package-name: melodious
 
       - name: Tag created
         if: ${{ steps.release.outputs.release_created }}
