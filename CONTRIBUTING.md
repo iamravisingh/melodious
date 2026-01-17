@@ -7,7 +7,7 @@ Thanks for your interest in contributing! This guide will help you get started.
 1. **Fork the repository**
 2. **Clone your fork**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/melodious.git
+   git clone https://github.com/iamravisingh/melodious
    cd melodious
    ```
 3. **Install dependencies**
