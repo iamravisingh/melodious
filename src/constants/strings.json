@@ -1,0 +1,16 @@
+{
+  "app": {
+    "name": "Melodious"
+  },
+  "landing": {
+    "title": "Melodious"
+  },
+  "home": {
+    "title": "Melodious",
+    "urlPlaceholder": "Paste video URL here",
+    "urlHelper": "Supports YouTube links",
+    "loadButton": "Load Video",
+    "recordButton": "Record",
+    "stopButton": "Stop"
+  }
+}
