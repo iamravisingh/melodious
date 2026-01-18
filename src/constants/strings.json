@@ -11,6 +11,13 @@
     "urlHelper": "Supports YouTube links",
     "loadButton": "Load Video",
     "recordButton": "Record",
-    "stopButton": "Stop"
+    "stopButton": "Stop",
+    "trackLabel": "Track:",
+    "yourVoiceLabel": "Your Voice:",
+    "noteLabel": "Note",
+    "pitchLabel": "Pitch",
+    "keyLabel": "Key",
+    "scaleLabel": "Scale",
+    "noDataLabel": "—"
   }
 }
