@@ -50,19 +50,21 @@ export default function HomeScreen() {
           )}
         </View>
         <Text style={styles.helper}>{strings.home.urlHelper}</Text>
-      </View>
-
-      <TouchableOpacity 
-        style={[styles.button, (!url.trim() || isLoading) && styles.buttonDisabled]} 
-        onPress={handleLoadVideo}
-        disabled={!url.trim() || isLoading}
-      >
-        {isLoading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.buttonText}>{strings.home.loadButton}</Text>
+        
+        {!videoLoaded && (
+          <TouchableOpacity 
+            style={[styles.loadButton, (!url.trim() || isLoading) && styles.buttonDisabled]} 
+            onPress={handleLoadVideo}
+            disabled={!url.trim() || isLoading}
+          >
+            {isLoading ? (
+              <ActivityIndicator color="#374151" />
+            ) : (
+              <Text style={styles.loadButtonText}>{strings.home.loadButton}</Text>
+            )}
+          </TouchableOpacity>
         )}
-      </TouchableOpacity>
+      </View>
 
       {videoLoaded && (
         <>
@@ -70,11 +72,47 @@ export default function HomeScreen() {
             <YouTubePlayer url={url} />
           </View>
 
+          <View style={styles.analysisContainer}>
+            <View style={styles.analysisRow}>
+              <View style={styles.analysisColumn}>
+                <Text style={styles.analysisLabel}>{strings.home.trackLabel}</Text>
+                <View style={styles.dataRow}>
+                  <View style={styles.dataItem}>
+                    <Text style={styles.dataLabel}>{strings.home.noteLabel}</Text>
+                    <Text style={styles.dataValue}>{strings.home.noDataLabel}</Text>
+                  </View>
+                  <View style={styles.dataItem}>
+                    <Text style={styles.dataLabel}>{strings.home.pitchLabel}</Text>
+                    <Text style={styles.dataValue}>{strings.home.noDataLabel}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.divider} />
+
+            <View style={styles.analysisRow}>
+              <View style={styles.analysisColumn}>
+                <Text style={styles.analysisLabel}>{strings.home.yourVoiceLabel}</Text>
+                <View style={styles.dataRow}>
+                  <View style={styles.dataItem}>
+                    <Text style={styles.dataLabel}>{strings.home.noteLabel}</Text>
+                    <Text style={styles.dataValue}>{strings.home.noDataLabel}</Text>
+                  </View>
+                  <View style={styles.dataItem}>
+                    <Text style={styles.dataLabel}>{strings.home.pitchLabel}</Text>
+                    <Text style={styles.dataValue}>{strings.home.noDataLabel}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+
           <TouchableOpacity 
-            style={[styles.button, styles.recordButton, isRecording && styles.recordingButton]} 
+            style={[styles.recordButton, isRecording && styles.recordingButton]} 
             onPress={toggleRecording}
           >
-            <Text style={styles.buttonText}>
+            <Text style={styles.recordButtonText}>
               {isRecording ? strings.home.stopButton : strings.home.recordButton}
             </Text>
           </TouchableOpacity>
@@ -104,6 +142,8 @@ const styles = StyleSheet.create({
   inputWrapper: {
     position: 'relative',
     marginBottom: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   input: {
     fontFamily: 'monospace',
@@ -113,12 +153,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     paddingRight: 40,
+    flex: 1,
   },
   clearButton: {
     position: 'absolute',
     right: 12,
-    top: '50%',
-    transform: [{ translateY: -12 }],
     width: 24,
     height: 24,
     justifyContent: 'center',
@@ -133,30 +172,87 @@ const styles = StyleSheet.create({
     fontFamily: 'monospace',
     fontSize: 12,
     color: '#6b7280',
+    marginBottom: 12,
   },
-  button: {
-    backgroundColor: '#2563eb',
+  loadButton: {
+    backgroundColor: '#f3f4f6',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#d1d5db',
+  },
+  loadButtonText: {
+    fontFamily: 'monospace',
+    color: '#374151',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  buttonDisabled: {
+    opacity: 0.5,
+  },
+  recordButton: {
+    backgroundColor: '#374151',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
+    marginTop: 20,
   },
-  buttonDisabled: {
-    backgroundColor: '#9ca3af',
-  },
-  buttonText: {
+  recordButtonText: {
     fontFamily: 'monospace',
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
   },
-  recordButton: {
-    backgroundColor: '#10b981',
-    marginTop: 20,
-  },
   recordingButton: {
-    backgroundColor: '#ef4444',
+    backgroundColor: '#dc2626',
   },
   videoContainer: {
     marginTop: 20,
+  },
+  analysisContainer: {
+    marginTop: 20,
+    backgroundColor: '#f9fafb',
+    borderRadius: 8,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  analysisRow: {
+    marginBottom: 0,
+  },
+  analysisColumn: {
+    flex: 1,
+  },
+  analysisLabel: {
+    fontFamily: 'monospace',
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#374151',
+    marginBottom: 8,
+  },
+  dataRow: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  dataItem: {
+    flex: 1,
+  },
+  dataLabel: {
+    fontFamily: 'monospace',
+    fontSize: 11,
+    color: '#6b7280',
+    marginBottom: 4,
+  },
+  dataValue: {
+    fontFamily: 'monospace',
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1f2937',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#e5e7eb',
+    marginVertical: 12,
   },
 });
