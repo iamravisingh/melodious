@@ -4,10 +4,10 @@ A mobile app for musicians to practice by playing along with YouTube videos whil
 
 ## Features
 
-- 🎵 Practice with YouTube videos/audio
-- 🎤 Real-time voice recording
-- 🎼 Pitch and scale detection
-- 📊 Key verification against backing track
+- Practice with YouTube videos/audio
+- Real-time voice recording
+- Pitch and scale detection
+- Key verification against backing track
 
 ## Tech Stack
 
@@ -38,7 +38,7 @@ bun run web
 
 ## Project Status
 
-🚧 MVP in development - YouTube integration only
+MVP in development - YouTube integration only
 
 ## Contributing
 
