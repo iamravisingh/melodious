@@ -1,0 +1,55 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  verify-commit-msg:
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:latest
+    steps:
+      - name: Install git and bash
+        run: apk add --no-cache git bash
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Trust git directory
+        run: git config --global --add safe.directory '*'
+
+      - name: Validate commit messages
+        run: |
+          # Get all commits in the PR
+          COMMITS=$(git log --format=%s origin/${{ github.base_ref }}..${{ github.sha }})
+          
+          # Only allow types defined in release-please-config.json
+          PATTERN="^(feat|fix|perf|docs|style|refactor|test|build|ci)(\(.+\))?: .+"
+          
+          INVALID_COMMITS=""
+          while IFS= read -r commit; do
+            if [[ ! "$commit" =~ $PATTERN ]]; then
+              INVALID_COMMITS="${INVALID_COMMITS}\n- ${commit}"
+            fi
+          done <<< "$COMMITS"
+          
+          if [[ -n "$INVALID_COMMITS" ]]; then
+            echo "❌ Invalid commit messages found:"
+            echo -e "$INVALID_COMMITS"
+            echo ""
+            echo "Commit messages must follow Conventional Commits format:"
+            echo "  <type>(<scope>): <description>"
+            echo ""
+            echo "Allowed types: feat, fix, perf, docs, style, refactor, test, build, ci"
+            echo ""
+            echo "Examples:"
+            echo "  feat: add pitch detection service"
+            echo "  fix(audio): correct recording hook"
+            echo "  docs: update README with setup instructions"
+            exit 1
+          fi
+          
+          echo "✅ All commit messages follow Conventional Commits format"
