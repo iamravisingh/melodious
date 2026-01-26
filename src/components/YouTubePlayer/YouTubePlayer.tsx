@@ -5,7 +5,8 @@ interface YouTubePlayerProps {
   url: string;
 }
 
-export default function YouTubePlayer({ url }: YouTubePlayerProps) {
+const YouTubePlayer: React.FC<YouTubePlayerProps> = ({ url }) => {
+  // Extract YouTube video ID and generate embed URL
   const getYouTubeEmbedUrl = (videoUrl: string): string => {
     const videoIdMatch = videoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]+)/);
     const videoId = videoIdMatch ? videoIdMatch[1] : '';
@@ -31,7 +32,9 @@ export default function YouTubePlayer({ url }: YouTubePlayerProps) {
       />
     </View>
   );
-}
+};
+
+export default YouTubePlayer;
 
 const styles = StyleSheet.create({
   container: {

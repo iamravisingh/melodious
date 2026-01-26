@@ -7,9 +7,9 @@
   },
   "home": {
     "title": "Melodious",
-    "urlPlaceholder": "Paste video URL here",
-    "urlHelper": "Supports YouTube links",
-    "loadButton": "Load Video",
+    "urlPlaceholder": "Paste YouTube, Spotify, or audio file URL",
+    "urlHelper": "Supports YouTube, Spotify, YouTube Music, MP3, WAV",
+    "loadButton": "Load Media",
     "recordButton": "Record",
     "stopButton": "Stop",
     "trackLabel": "Track:",

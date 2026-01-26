@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { LandingScreen } from './src/components/LandingScreen';
 import { HomeScreen } from './src/components/HomeScreen';
 
-export default function App() {
+const App: React.FC = () => {
   const [isReady, setIsReady] = useState(false);
 
   if (!isReady) {
@@ -16,4 +16,6 @@ export default function App() {
       <StatusBar style="dark" />
     </>
   );
-}
+};
+
+export default App;
