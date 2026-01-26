@@ -2,16 +2,40 @@ import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import strings from '../../constants/strings.json';
 import { YouTubePlayer } from '../YouTubePlayer';
+import AudioPlayer from '../AudioPlayer';
+import { useAudioRecording } from '../../hooks/useAudioRecording';
+import { usePitchDetection } from '../../hooks/usePitchDetection';
 
-export default function HomeScreen() {
+type MediaType = 'youtube' | 'audio' | null;
+
+const HomeScreen: React.FC = () => {
   const [url, setUrl] = useState('');
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
+  const [mediaType, setMediaType] = useState<MediaType>(null);
 
+  const { isRecording, startRecording, stopRecording } = useAudioRecording();
+  const { isModelLoaded, currentPitch } = usePitchDetection();
+
+  // Detect media type from URL input
+  const detectMediaType = (input: string): MediaType => {
+    const trimmed = input.trim().toLowerCase();
+    if (trimmed.includes('youtube.com') || trimmed.includes('youtu.be')) {
+      return 'youtube';
+    }
+    if (trimmed.includes('spotify.com') || trimmed.includes('music.youtube.com') || 
+        trimmed.endsWith('.mp3') || trimmed.endsWith('.wav') || trimmed.endsWith('.m4a')) {
+      return 'audio';
+    }
+    return 'youtube'; // default
+  };
+
+  // Load media based on detected type
   const handleLoadVideo = () => {
     if (url.trim()) {
       setIsLoading(true);
+      const type = detectMediaType(url);
+      setMediaType(type);
       setTimeout(() => {
         setVideoLoaded(true);
         setIsLoading(false);
@@ -19,8 +43,22 @@ export default function HomeScreen() {
     }
   };
 
-  const toggleRecording = () => {
-    setIsRecording(!isRecording);
+  // Toggle recording state
+  const toggleRecording = async () => {
+    if (isRecording) {
+      const uri = await stopRecording();
+      if (uri) {
+        console.log('✓ Recording saved:', uri);
+        // TODO: Process audio file and detect pitch
+        // Simulate pitch detection
+        setTimeout(() => {
+          console.log('Pitch detected: A4 (440 Hz)');
+        }, 500);
+      }
+    } else {
+      await startRecording();
+      console.log('● Recording started...');
+    }
   };
 
   return (
@@ -69,7 +107,11 @@ export default function HomeScreen() {
       {videoLoaded && (
         <>
           <View style={styles.videoContainer}>
-            <YouTubePlayer url={url} />
+            {mediaType === 'youtube' ? (
+              <YouTubePlayer url={url} />
+            ) : (
+              <AudioPlayer uri={url} />
+            )}
           </View>
 
           <View style={styles.analysisContainer}>
@@ -97,11 +139,13 @@ export default function HomeScreen() {
                 <View style={styles.dataRow}>
                   <View style={styles.dataItem}>
                     <Text style={styles.dataLabel}>{strings.home.noteLabel}</Text>
-                    <Text style={styles.dataValue}>{strings.home.noDataLabel}</Text>
+                    <Text style={styles.dataValue}>{currentPitch?.note || strings.home.noDataLabel}</Text>
                   </View>
                   <View style={styles.dataItem}>
                     <Text style={styles.dataLabel}>{strings.home.pitchLabel}</Text>
-                    <Text style={styles.dataValue}>{strings.home.noDataLabel}</Text>
+                    <Text style={styles.dataValue}>
+                      {currentPitch ? `${Math.round(currentPitch.frequency)} Hz` : strings.home.noDataLabel}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -120,7 +164,9 @@ export default function HomeScreen() {
       )}
     </View>
   );
-}
+};
+
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet, Animated } from 'react-native';
 import strings from '../../constants/strings.json';
 
-export default function LandingScreen({ onReady }: { onReady: () => void }) {
+const LandingScreen: React.FC<{ onReady: () => void }> = ({ onReady }) => {
   const fadeAnim = new Animated.Value(0);
 
   useEffect(() => {
@@ -26,7 +26,9 @@ export default function LandingScreen({ onReady }: { onReady: () => void }) {
       </Animated.Text>
     </View>
   );
-}
+};
+
+export default LandingScreen;
 
 const styles = StyleSheet.create({
   container: {
